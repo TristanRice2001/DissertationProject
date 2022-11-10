@@ -7,7 +7,7 @@ import { LoginForm } from "types/forms/login";
 import { RegisterForm } from "types/forms/register";
 import constants from "appConstants";
 
-type submitProps =
+type SubmitProps =
   | {
       valuesType: "login";
       values: LoginForm;
@@ -24,7 +24,7 @@ export const useAuth = () => {
   const router = useRouter();
   const [apiError, setApiError] = useState<string>("");
 
-  const handleSubmit = async ({ valuesType, values }: submitProps) => {
+  const handleSubmit = async ({ valuesType, values }: SubmitProps) => {
     let response;
 
     try {
