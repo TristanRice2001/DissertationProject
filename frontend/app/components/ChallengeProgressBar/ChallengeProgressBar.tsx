@@ -15,7 +15,6 @@ const ChallengeProgressBar = ({
   totalSecondsLeftForChallenge,
   className,
 }: Props) => {
-  console.log(totalSecondsLeftForChallenge);
   const secondsElapsed = useTimer();
   const timeRemainingForUser = totalSecondsLeftForChallenge - secondsElapsed;
   const secondsToDisplay = timeRemainingForUser > 0 ? timeRemainingForUser : 0;

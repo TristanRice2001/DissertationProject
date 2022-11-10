@@ -38,18 +38,18 @@ export const getServerSideProps: GetServerSideProps = async (
   let meData;
 
   try {
-    meData = await me();
+    meData = await me(authCookie);
   } catch (e) {
     return registerRedirectObj;
   }
 
   if (!meData?.data.success) return registerRedirectObj;
 
-  const challenges = await getChallenges();
+  const challenges = await getChallenges(authCookie);
 
   return {
     props: {
-      challenges: challenges,
+      challenges: challenges.data,
     },
   };
 };

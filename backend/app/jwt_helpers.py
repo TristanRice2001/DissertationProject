@@ -16,7 +16,7 @@ def jwt_token_required(f):
     @wraps(f)
     def decorator(*args, **kwargs):
         if "Authorization" not in request.headers or not request.headers["Authorization"]:
-            return generic_response(message=general_messages["JWT_token_missing"], is_successfull=True)
+            return generic_response(message=general_messages["JWT_token_missing"], is_successfull=False)
 
         token = request.headers["Authorization"]
         
