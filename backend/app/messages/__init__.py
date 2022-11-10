@@ -1,0 +1,3 @@
+from app.messages.auth_messages import auth_messages
+from app.messages.general_messages import general_messages
+from app.messages.challenge_messages import challenge_messages

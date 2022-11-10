@@ -1,0 +1,6 @@
+PASSWORD_MIN_LENGTH = 8
+USERNAME_MIN_LENGTH = 3
+USERNAME_MAX_LENGTH = 12
+REGEX_VERIFY_USERNAME = r"^[\w\d_]"
+REGEX_VERIFY_PASSWORD = r"^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-])"
+JWT_ALGORITHM = "HS256"
