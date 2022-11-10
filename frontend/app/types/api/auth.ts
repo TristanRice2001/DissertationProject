@@ -1,4 +1,4 @@
-export type RegisterResponse = {
+export type AuthResponse = {
   message: string;
 } & (
   | {

@@ -1,4 +1,4 @@
-import Button from "components/Button";
+import ActionButton from "components/ActionButton";
 import ChallengePoints from "components/ChallengePoints";
 import ChallengeProgressBar from "components/ChallengeProgressBar";
 import ChallengeStatus from "components/ChallengeStatus";
@@ -16,10 +16,10 @@ const Challenge = ({ challenge }: Props) => {
       <ChallengePoints className="challenge-points" points={challenge.points} />
       <p className="challenge-name">{challenge.name}</p>
       <div className="challenge-buttons">
-        <Button variant="start" isDisabled={isChallengeActive} />
-        <Button variant="stop" isDisabled={!isChallengeActive} />
-        <Button variant="reset" isDisabled={!isChallengeActive} />
-        <Button variant="hint" />
+        <ActionButton variant="start" isDisabled={isChallengeActive} />
+        <ActionButton variant="stop" isDisabled={!isChallengeActive} />
+        <ActionButton variant="reset" isDisabled={!isChallengeActive} />
+        <ActionButton variant="hint" />
       </div>
       {isChallengeActive &&
         challenge.secondsLeftForChallenge &&

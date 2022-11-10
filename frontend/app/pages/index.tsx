@@ -3,14 +3,14 @@ import PageSkeleton from "components/PageSkeleton/PageSkeleton";
 import { Challenge } from "types/challenge";
 import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Dashboard from "../containers/Dashboard";
-import { getCookie } from "helpers/cookie";
-import { AUTH_TOKEN_COOKIE_NAME } from "appConstants";
-import { isContext } from "vm";
+import constants from "appConstants";
 import { me } from "api/me";
 
 interface Props {
   challenges: Challenge[];
 }
+
+const { AUTH_TOKEN_COOKIE_NAME } = constants;
 
 export default function Home({ challenges }: Props) {
   return (

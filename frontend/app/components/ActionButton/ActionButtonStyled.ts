@@ -13,7 +13,7 @@ const variantColors = {
   hint: "#30D5EC",
 };
 
-const ButtonStyled = styled.button<Props>`
+const ActionButtonStyled = styled.button<Props>`
   cursor: ${(props) => (props.isDisabled ? "auto" : "pointer")};
   background: ${(props) => variantColors[props.variant]};
   color: black;
@@ -27,4 +27,4 @@ const ButtonStyled = styled.button<Props>`
   ${(props) => props.isDisabled && `opacity: 0.6`};
 `;
 
-export default ButtonStyled;
+export default ActionButtonStyled;

@@ -1,4 +1,4 @@
-import ButtonStyled from "./ButtonStyled";
+import ActionButtonStyled from "./ActionButtonStyled";
 import { Variant } from "./types";
 
 interface Props {
@@ -6,7 +6,7 @@ interface Props {
   isDisabled?: boolean;
 }
 
-const Button = ({ variant, isDisabled }: Props) => {
+const ActionButton = ({ variant, isDisabled }: Props) => {
   const buttonText = {
     start: "Start",
     stop: "Stop",
@@ -14,14 +14,14 @@ const Button = ({ variant, isDisabled }: Props) => {
     hint: "Hint",
   };
   return (
-    <ButtonStyled
+    <ActionButtonStyled
       variant={variant}
       isDisabled={isDisabled}
       disabled={isDisabled}
     >
       {buttonText[variant]}
-    </ButtonStyled>
+    </ActionButtonStyled>
   );
 };
 
-export default Button;
+export default ActionButton;

@@ -1,9 +1,10 @@
 import axios from "axios";
-import { RegisterResponse } from "types/api/register";
+import { AuthResponse } from "types/api/auth";
+import { RegisterForm } from "types/forms/register";
 import { REGISTER } from "./endpoints";
 
-export const register = (username: string, password: string) => {
-  return axios.post<RegisterResponse>(REGISTER, {
+export const register = ({ username, password }: RegisterForm) => {
+  return axios.post<AuthResponse>(REGISTER, {
     username,
     password,
   });

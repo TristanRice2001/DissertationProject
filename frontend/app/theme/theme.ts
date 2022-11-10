@@ -8,7 +8,7 @@ export const theme = {
   },
 
   fonts: {
-    primrary: "'Roboto', sans-serif",
+    primary: "'Roboto', sans-serif",
   },
 };
 
