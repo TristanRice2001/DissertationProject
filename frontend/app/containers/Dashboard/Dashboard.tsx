@@ -1,19 +1,17 @@
 import { startChallenge } from "api/startChallenge";
-import constants from "appConstants";
+import { terminateChallenge } from "api/terminateChallenge";
+import appConstants from "appConstants";
 import Challenge from "components/Challenge";
 import HintsModal from "components/HintsModal";
-import { getCookie } from "helpers/cookie";
+import { getJwtToken } from "helpers";
+import { useChallenges } from "hooks/useChallenges";
 import { useState } from "react";
-import { Challenge as ChallengeType } from "types/challenge";
 import DashboardStlyed from "./DashboardStyled";
 
-interface Props {
-  challenges: ChallengeType[];
-}
-
-const Dashboard = ({ challenges }: Props) => {
+const Dashboard = () => {
   const [isHintsModalOpen, setIsHintsModalOpen] = useState(false);
   const [selectedHints, setSelectedHints] = useState<string[]>([]);
+  const { challenges, modifyChallengeStatus } = useChallenges();
 
   const handleClose = () => {
     setIsHintsModalOpen(false);
@@ -24,17 +22,48 @@ const Dashboard = ({ challenges }: Props) => {
     setIsHintsModalOpen(true);
   };
 
+  const handleError = (message = "") => {
+    console.log("Error occured!");
+  };
+
   const handleStart = async (chalId: number) => {
-    const authTokenCookieName = constants["AUTH_TOKEN_COOKIE_NAME"];
-    const authToken = getCookie(authTokenCookieName);
+    const authToken = getJwtToken();
     if (!authToken) return;
 
+    let res;
+
     try {
-      const res = await startChallenge(authToken, chalId);
-      console.log(res.data);
-    } catch {
-      console.log("Here");
+      res = await startChallenge(authToken, chalId);
+    } catch (e) {
+      handleError();
     }
+
+    if (!res || !res?.data.success || !res?.data.challenge) {
+      handleError();
+      return;
+    }
+
+    modifyChallengeStatus(res.data.challenge);
+  };
+
+  const handleTermination = async (chalId: number) => {
+    const authToken = getJwtToken();
+    if (!authToken) return;
+
+    let res;
+
+    try {
+      res = await terminateChallenge(authToken, chalId);
+    } catch (e) {
+      handleError(appConstants["GENERIC_API_ERROR"]);
+    }
+
+    if (!res || !res?.data.success || !res?.data.challenge) {
+      handleError(res?.data.message);
+      return;
+    }
+
+    modifyChallengeStatus(res.data.challenge);
   };
 
   return (
@@ -42,6 +71,7 @@ const Dashboard = ({ challenges }: Props) => {
       <div className="challenge-container">
         {challenges.map((chal) => (
           <Challenge
+            onTermination={handleTermination}
             onStart={handleStart}
             key={chal.id}
             challenge={chal}

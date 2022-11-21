@@ -7,4 +7,11 @@ class UserChallenge(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     ip = db.Column(db.String(255))
     challenge = db.relationship("Challenge")
-    user = db.relationship("User")
+    user = db.relationship("User", lazy="subquery")
+
+    def pretty(self):
+        return {
+            **self.challenge.pretty(),
+            "status": "active",
+            "ip": self.ip
+        }

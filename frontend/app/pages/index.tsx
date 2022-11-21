@@ -5,6 +5,8 @@ import { GetServerSideProps, GetServerSidePropsContext } from "next";
 import Dashboard from "../containers/Dashboard";
 import constants from "appConstants";
 import { me } from "api/me";
+import { useChallenges } from "hooks/useChallenges";
+import { useEffect } from "react";
 
 interface Props {
   challenges: Challenge[];
@@ -13,9 +15,15 @@ interface Props {
 const { AUTH_TOKEN_COOKIE_NAME } = constants;
 
 export default function Home({ challenges }: Props) {
+  const { setChallenges } = useChallenges();
+
+  useEffect(() => {
+    setChallenges(challenges);
+  }, []);
+
   return (
     <PageSkeleton>
-      <Dashboard challenges={challenges} />
+      <Dashboard />
     </PageSkeleton>
   );
 }

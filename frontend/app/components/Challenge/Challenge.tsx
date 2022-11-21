@@ -9,9 +9,10 @@ interface Props {
   challenge: ChallengeType;
   onStart: (chalId: number) => void;
   onHint: (hints: string[]) => void;
+  onTermination: (chalId: number) => void;
 }
 
-const Challenge = ({ challenge, onHint, onStart }: Props) => {
+const Challenge = ({ challenge, onHint, onStart, onTermination }: Props) => {
   const isChallengeActive = challenge.status === "active";
 
   const handleHintClick = () => {
@@ -20,6 +21,10 @@ const Challenge = ({ challenge, onHint, onStart }: Props) => {
 
   const handleStartClick = () => {
     onStart(challenge.id);
+  };
+
+  const handleTerminationClick = () => {
+    onTermination(challenge.id);
   };
 
   return (
@@ -32,7 +37,11 @@ const Challenge = ({ challenge, onHint, onStart }: Props) => {
           isDisabled={isChallengeActive}
           onClick={handleStartClick}
         />
-        <ActionButton variant="stop" isDisabled={!isChallengeActive} />
+        <ActionButton
+          variant="stop"
+          onClick={handleTerminationClick}
+          isDisabled={!isChallengeActive}
+        />
         <ActionButton variant="reset" isDisabled={!isChallengeActive} />
         <ActionButton variant="hint" onClick={handleHintClick} />
       </div>
