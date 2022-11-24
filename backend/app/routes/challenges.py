@@ -1,88 +1,99 @@
-from app import app
-from app import db
+import time
 from flask import jsonify
+from app.facades import ChallengeFacade
+from app import app, db
+from app import challenge_service
 from app.models import Challenge, UserChallenge
 from app.messages import challenge_messages
-from app.responses import generic_response
+from app.responses import error_response, success_response
 from app.jwt_helpers import jwt_token_required
-
-def make_inactive_challenge_json(challenge):
-  return {
-    **challenge.pretty(),
-    "status": "inactive"
-  }
+from app.exceptions import ChallengeServerError
+from app.validator import validator
+from app.validators import validate_challenge_id, validate_challenge_exists
 
 #ToDo: Refactor this
 def get_all_challenges_with_user(user):
+  current_time = int(time.time())
   user_active_challenges = UserChallenge.query.filter_by(user=user).all()
+  # user_active_Challenges = 
+  #   UserChallenge
+  #     .query.filter_by(user=user)
+  #     .join(UserChallenge.challenge, aliased=True)
+  #     .filter_by(time_taken )
+  # user_active_challenges = UserChallenge.query.filter_by(
+  #   user=user
+  # ).all()
   user_active_challenge_ids = [user_challenge.challenge.id for user_challenge in user_active_challenges]
   all_challenges = Challenge.query.all()
   response = []
   curr_active_challenge = 0
   for challenge in all_challenges:
-    obj = make_inactive_challenge_json(challenge)
     if challenge.id not in user_active_challenge_ids:
-      response.append(obj)
+      response.append(challenge.inactive())
       continue
-    obj["status"] = "active"
-    obj["ip"] = user_active_challenges[curr_active_challenge].ip
+    active_challenge_dict = challenge.active(
+      ip=user_active_challenges[curr_active_challenge].ip,
+      time_left=7200,
+      time_total=7200
+    )
+    response.append(active_challenge_dict)
     curr_active_challenge+=1
-    response.append(obj)
   return response
 
 @app.route("/challenges")
 @jwt_token_required
 def challenges(jwt_user):
-  user_chals = get_all_challenges_with_user(jwt_user)
-  return jsonify(user_chals)
+  print(UserChallenge.get_active_challenges(jwt_user))
+  # user_chals = get_all_challenges_with_user(jwt_user)
+  return jsonify({})
 
 
 @app.route("/challenge/<challenge_id>/start")
 @jwt_token_required
+@validator(
+  validators=[validate_challenge_id, validate_challenge_exists],
+  expected_args=["challenge_id"]
+)
 def start_challenge(jwt_user, challenge_id):
-  try:
-    challenge_id = int(challenge_id)
-  except ValueError:
-    return generic_response(message=challenge_messages["invalid_challenge_id"], is_successfull=False)
-  
+  print("Here")
   challenge = Challenge.query.get(challenge_id)
-  if not challenge:
-    return generic_response(message=challenge_messages["challenge_not_exist"], is_successfull=False)
-  
   existing_active_challenges = UserChallenge.query.filter_by(user_id=jwt_user.id, challenge_id=challenge_id).first()
+  
   if existing_active_challenges is not None:
-    return generic_response(
-      message=challenge_messages["already_started"],
-      is_successfull=False
-    )
+    return error_response(message=challenge_messages["already_started"])
 
-  user_challenge = UserChallenge(ip="10.10.10.10", challenge=challenge, user=jwt_user)
+  try:
+    user_challenge = ChallengeFacade.start_challenge(challenge, jwt_user)
+  except ChallengeServerError as e:
+    return error_response(message=str(e))
 
-  db.session.add(user_challenge)
-  db.session.commit()
-
-  return generic_response(
+  return success_response(
     message=challenge_messages["created_successfully"],
-    is_successfull=True,
     challenge=user_challenge.pretty()
   )
 
 @app.route("/challenge/<challenge_id>/terminate")
 @jwt_token_required
+@validator(
+  validators=[validate_challenge_id, validate_challenge_exists],
+  expected_args=["challenge_id"]
+)
 def terminate_challenge(jwt_user, challenge_id):
-  user_challenge = UserChallenge.query.filter_by(challenge_id=challenge_id).first()
+  user_challenge = UserChallenge.query.filter_by(challenge_id=challenge_id, user=jwt_user).first()
   if not user_challenge:
-    return generic_response(
-      message=challenge_messages["not_started"],
-      is_successfull=False,
-    )
+    return error_response(message=challenge_messages["not_started"])
+  
+  # termination_result = challenge_service.terminate_challenge(challenge_id)
+
+  # if not termination_result["success"]:
+  #   return error_response(message=challenge_messages["termination_unsuccessful"])
   
   challenge_json = user_challenge.challenge
   db.session.delete(user_challenge)  
   db.session.commit()
+  print(challenge_json.inactive())
 
-  return generic_response(
+  return success_response(
     message=challenge_messages["terminated_successfully"],
-    is_successfull=True,
-    challenge=make_inactive_challenge_json(challenge_json)
+    challenge=challenge_json.inactive()
   )

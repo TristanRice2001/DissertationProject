@@ -11,5 +11,6 @@ auth_messages = {
     "user_created": "User has been created successfully",
     "user_exists": "A user with that username already exists",
     "invalid_login": "Username or password is incorrect",
+    "login_successful": "User has been logged in successfully!",
     "jwt_valid": "JWT token is valid for user"
 }

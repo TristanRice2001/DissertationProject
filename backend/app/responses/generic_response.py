@@ -1,4 +1,5 @@
 from flask import jsonify
+from functools import partial
 
 def generic_response(message, is_successfull, **kwargs):
     response = {
@@ -7,3 +8,6 @@ def generic_response(message, is_successfull, **kwargs):
     }
 
     return jsonify({**response, **kwargs})
+
+error_response = partial(generic_response, is_successfull=False)
+success_response = partial(generic_response, is_successfull=True)

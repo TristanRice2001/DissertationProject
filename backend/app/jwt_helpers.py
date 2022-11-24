@@ -1,7 +1,6 @@
 import jwt
 from functools import wraps
 from app.messages import general_messages
-from flask import jsonify
 from flask import request
 from app.models import User
 from app.responses import generic_response

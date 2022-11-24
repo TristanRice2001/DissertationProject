@@ -3,6 +3,7 @@ from app.config import Config
 from sqlalchemy import MetaData
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
+from app.services import ChallengeService
 from flask_cors import CORS
 
 
@@ -14,9 +15,11 @@ naming_convention = {
     "pk": "pk_%(table_name)s"
 }
 
-
+ 
 app = Flask(__name__)
 app.config.from_object(Config)
+challenge_service = None
+challenge_service = ChallengeService("192.168.200.132", 8081)
 db = SQLAlchemy(app, metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate(app, db, render_as_batch=True)
 CORS(app)

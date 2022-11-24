@@ -1,0 +1,1 @@
+from app.facades.ChallengeFacade import ChallengeFacade

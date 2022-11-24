@@ -5,6 +5,7 @@ class Challenge(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(255))
     points = db.Column(db.Integer)
+    time_allowed = db.Column(db.Integer)
     hints = db.relationship("ChallengeHint", backref="challenge", lazy="dynamic")
 
     def __repr__(self):
@@ -17,4 +18,19 @@ class Challenge(db.Model):
             "name": self.name,
             "points": self.points,
             "hints": hints_arr
+        }
+
+    def active(self, ip, time_left, time_total):
+        return {
+            **self.pretty(),
+            "ip": ip,
+            "time_left": time_left,
+            "time_total": time_total,
+            "status": "active"
+        }
+    
+    def inactive(self):
+        return {
+            **self.pretty(),
+            "status": "inactive"
         }
