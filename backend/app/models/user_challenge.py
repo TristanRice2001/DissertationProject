@@ -1,5 +1,4 @@
 import time
-from sqlalchemy.orm import aliased
 from app import db
 from app.models import Challenge
 
@@ -9,8 +8,9 @@ class UserChallenge(db.Model):
     challenge_id = db.Column(db.Integer, db.ForeignKey("challenges.id"))
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"))
     ip = db.Column(db.String(255))
-    challenge = db.relationship("Challenge")
+    container_id = db.Column(db.String(255))
     time_started = db.Column(db.Integer, default=time.time())
+    challenge = db.relationship("Challenge")
     user = db.relationship("User", lazy="subquery")
 
     def __init__(self, *args, **kwargs) -> None:
@@ -21,18 +21,12 @@ class UserChallenge(db.Model):
         return {
             **self.challenge.pretty(),
             "status": "active",
-            "ip": self.ip
+            "ip": self.ip,
+            "secondsLeft": self._total_seconds_left
         }
 
-    @staticmethod
-    def get_active_challenges(user):
+    @property
+    def _total_seconds_left(self):
         current_time = time.time()
-        user_active_challenges = (
-            UserChallenge
-                .query
-                .filter_by(user=user)
-                .join(Challenge, aliased=True)
-                .filter((current_time - UserChallenge.time_started) < Challenge.time_allowed)
-                .all()
-        )
-        return user_active_challenges
+        time_remaining = self.challenge.time_allowed - (current_time - self.time_started)
+        return int(time_remaining)

@@ -13,6 +13,7 @@ const ActionButton = ({ variant, isDisabled, onClick }: Props) => {
     stop: "Stop",
     reset: "Reset",
     hint: "Hint",
+    submit: "Submit Flag",
   };
   return (
     <ActionButtonStyled

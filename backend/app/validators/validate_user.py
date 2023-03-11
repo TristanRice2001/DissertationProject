@@ -31,3 +31,15 @@ def validate_username_not_taken(username):
 
     if user_check is not None:
         raise ValidationError(auth_messages["user_exists"])
+
+def validate_userid(user_id):
+    try:
+        int(user_id)
+    except  (ValueError, TypeError):
+        raise ValidationError(auth_messages["invalid_user_id"])
+    
+def validate_userid_exists(user_id):
+    user_check = User.query.filter_by(id=user_id).first()
+
+    if user_check is None:
+        raise ValidationError(auth_messages["user_does_not_exist"])

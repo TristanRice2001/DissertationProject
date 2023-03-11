@@ -1,17 +1,25 @@
-import { ReactNode, useRef } from "react";
+import { ReactNode, useEffect, useRef } from "react";
 
 interface Props {
   isOpen?: boolean;
   children: ReactNode;
+  onClose: () => void;
 }
 
-const Modal = ({ isOpen, children }: Props) => {
+const Modal = ({ isOpen, onClose, children }: Props) => {
   const ref = useRef<HTMLDialogElement | null>(null);
 
-  if (isOpen) {
-    ref.current?.showModal();
-  }
-  return <dialog ref={ref}>{children}</dialog>;
+  useEffect(() => {
+    if (isOpen) {
+      ref.current?.showModal();
+    }
+  }, [isOpen]);
+
+  return (
+    <dialog ref={ref} onClose={onClose}>
+      {children}
+    </dialog>
+  );
 };
 
 export default Modal;

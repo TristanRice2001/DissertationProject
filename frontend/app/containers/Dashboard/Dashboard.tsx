@@ -3,18 +3,53 @@ import { terminateChallenge } from "api/terminateChallenge";
 import appConstants from "appConstants";
 import Challenge from "components/Challenge";
 import HintsModal from "components/HintsModal";
+import SubmitModal from "components/SubmitModal";
 import { getJwtToken } from "helpers";
 import { useChallenges } from "hooks/useChallenges";
-import { useState } from "react";
+import { useToggle } from "hooks/useToggle";
+import { useState, useReducer } from "react";
 import DashboardStlyed from "./DashboardStyled";
 
+type LoadingQueryAction = {
+  type: "add_loading_chal" | "remove_loading_chal";
+  chalId: number;
+};
+
+const loadingQueries = (state: number[], action: LoadingQueryAction) => {
+  // Replace this with react-query soon
+  if (action.type == "add_loading_chal") {
+    return [...state, action.chalId];
+  } else if (action.type == "remove_loading_chal") {
+    const chalIdIndex = state.indexOf(action.chalId);
+    if (chalIdIndex < 0) {
+      return state;
+    }
+    state.splice(chalIdIndex, 1);
+    return state;
+  }
+};
+
 const Dashboard = () => {
+  const [isStartLoading, setIsStartLoading] = useState(false);
   const [isHintsModalOpen, setIsHintsModalOpen] = useState(false);
+  const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
   const [selectedHints, setSelectedHints] = useState<string[]>([]);
+  const [selectedChallengeSubmit, setSelectedChallengeSubmit] = useState<
+    number | null
+  >(null);
   const { challenges, modifyChallengeStatus } = useChallenges();
 
-  const handleClose = () => {
+  const handleHintsModalClose = () => {
     setIsHintsModalOpen(false);
+  };
+
+  const handleSubmitModalOpen = (chalId: number) => {
+    setIsSubmitModalOpen(true);
+    setSelectedChallengeSubmit(chalId);
+  };
+
+  const handleSubmitModalClsoe = () => {
+    setIsSubmitModalOpen(false);
   };
 
   const handleHint = (hints: string[]) => {
@@ -27,6 +62,8 @@ const Dashboard = () => {
   };
 
   const handleStart = async (chalId: number) => {
+    setIsStartLoading(true);
+
     const authToken = getJwtToken();
     if (!authToken) return;
 
@@ -34,8 +71,11 @@ const Dashboard = () => {
 
     try {
       res = await startChallenge(authToken, chalId);
+      setIsStartLoading(false);
     } catch (e) {
+      setIsStartLoading(false);
       handleError();
+      return;
     }
 
     if (!res || !res?.data.success || !res?.data.challenge) {
@@ -71,19 +111,28 @@ const Dashboard = () => {
       <div className="challenge-container">
         {challenges.map((chal) => (
           <Challenge
+            isStartLoading={isStartLoading}
             onTermination={handleTermination}
             onStart={handleStart}
             key={chal.id}
             challenge={chal}
+            onSubmitFlag={handleSubmitModalOpen}
             onHint={handleHint}
           />
         ))}
       </div>
       <HintsModal
-        onClose={handleClose}
+        onClose={handleHintsModalClose}
         isOpen={isHintsModalOpen}
         hints={selectedHints}
       />
+      {isSubmitModalOpen && selectedChallengeSubmit && (
+        <SubmitModal
+          onClose={handleSubmitModalClsoe}
+          isOpen={isSubmitModalOpen}
+          chalId={selectedChallengeSubmit}
+        />
+      )}
     </DashboardStlyed>
   );
 };

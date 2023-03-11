@@ -1,5 +1,4 @@
 import Modal from "components/Modal";
-import { useRef } from "react";
 import HintsModalStyled from "./HintsModalStyled";
 
 interface Props {
@@ -12,7 +11,7 @@ interface Props {
 const HintsModal = ({ isOpen, className, hints, onClose }: Props) => {
   return (
     <HintsModalStyled className={className}>
-      <Modal isOpen={isOpen}>
+      <Modal isOpen={isOpen} onClose={onClose}>
         {hints}
         <form method="dialog">
           <button onClick={onClose}>Close</button>

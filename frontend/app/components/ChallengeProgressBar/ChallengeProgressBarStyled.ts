@@ -6,21 +6,15 @@ interface ProgressBarProps {
 
 const ChallengeProgressBarStyled = styled.div``;
 
-export const ProgressBar = styled.div<ProgressBarProps>`
-  width: 100%;
-  position: relative;
+export const ProgressBar = styled.div.attrs(
+  ({ percentageTimeRemaining }: ProgressBarProps) => ({
+    style: {
+      width: `${percentageTimeRemaining}%`,
+    },
+  })
+)<ProgressBarProps>`
   height: 10px;
-
-  &::before {
-    content: "";
-    display: block;
-    background: blue;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    width: ${(props) => props.percentageTimeRemaining}%;
-  }
+  background: blue;
 `;
 
 export default ChallengeProgressBarStyled;

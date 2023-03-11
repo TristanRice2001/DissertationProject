@@ -54,6 +54,7 @@ export const getServerSideProps: GetServerSideProps = async (
   if (!meData?.data.success) return registerRedirectObj;
 
   const challenges = await getChallenges(authCookie);
+  console.log(challenges.data);
 
   return {
     props: {

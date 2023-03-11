@@ -19,7 +19,7 @@ naming_convention = {
 app = Flask(__name__)
 app.config.from_object(Config)
 challenge_service = None
-challenge_service = ChallengeService("192.168.200.132", 8081)
+challenge_service = ChallengeService("10.8.0.1", 5000)
 db = SQLAlchemy(app, metadata=MetaData(naming_convention=naming_convention))
 migrate = Migrate(app, db, render_as_batch=True)
 CORS(app)

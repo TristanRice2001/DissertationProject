@@ -5,8 +5,9 @@ export interface Challenge {
   points: number;
   name: string;
   status: ChallengeStatus;
+  completed: boolean;
   ip?: string | null;
-  totalSecondsAvailavble?: number | null;
-  secondsLeftForChallenge?: number | null;
+  secondsAvailable?: number | null;
+  secondsLeft?: number | null;
   hints: string[];
 }
