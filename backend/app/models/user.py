@@ -33,6 +33,7 @@ class User(db.Model):
             return 0
         
         return chal_completions[0]
+    
 
     @property
     def active_challenges(self):
@@ -63,5 +64,4 @@ class User(db.Model):
             new_chal = {**chal, "completed": is_completed}
             jsonify_chals[i] = new_chal
         
-        print(jsonify_chals)
         return jsonify_chals

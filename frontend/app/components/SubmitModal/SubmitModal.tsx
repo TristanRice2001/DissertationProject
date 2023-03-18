@@ -1,11 +1,13 @@
 import { submitFlag } from "api/submitFlag";
-import FormItem from "components/FormItem/FormItem";
+import { toast } from "react-toastify";
 import Modal from "components/Modal";
 import TextBox from "components/TextBox";
 import { getJwtToken } from "helpers";
-import { useToggle } from "hooks/useToggle";
+import { useChallenges } from "hooks/useChallenges";
 import { FormEvent, useState, ChangeEvent } from "react";
 import { SubmitModalStyled } from "./SubmitModalStyled";
+import FormItem from "components/FormItem/FormItem";
+import SubmitButton from "components/SubmitButton/SubmitButton";
 
 interface Props {
   className?: string;
@@ -18,6 +20,7 @@ const SubmitModal = ({ isOpen, chalId, className, onClose }: Props) => {
   const [flag, setFlag] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const { completeChallenge } = useChallenges();
 
   const handleChange = (name: string, value: string) => {
     setFlag(value);
@@ -26,7 +29,7 @@ const SubmitModal = ({ isOpen, chalId, className, onClose }: Props) => {
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     const authToken = getJwtToken();
-
+    setIsLoading(true);
     let response;
 
     if (!authToken) {
@@ -36,15 +39,19 @@ const SubmitModal = ({ isOpen, chalId, className, onClose }: Props) => {
 
     try {
       response = await submitFlag(authToken, chalId, flag);
+      setIsLoading(false);
     } catch {
       setError("Error with API request");
+      setIsLoading(false);
+      return;
     }
 
     if (!response || !response.data.success) {
       setError(response?.data.message || "Incorrect flag");
       return;
     }
-
+    completeChallenge(chalId);
+    toast("Flag submitted successfully!");
     onClose();
   };
 
@@ -52,19 +59,20 @@ const SubmitModal = ({ isOpen, chalId, className, onClose }: Props) => {
     <SubmitModalStyled className={className}>
       <Modal isOpen={isOpen} onClose={onClose}>
         <form action="" onSubmit={handleSubmit}>
-          <TextBox
-            name="test"
+          <FormItem
+            name="flagContent"
             disabled={isLoading}
             value={flag}
             onChange={handleChange}
+            label="Flag"
           />
-          <input type="submit" />
+          <SubmitButton
+            isLoading={isLoading}
+            isDisabled={!flag}
+            className="submit-button"
+          />
         </form>
-        {error}
-        {isLoading && <p>Loading...</p>}
-        <form method="dialog">
-          <button onClick={onClose}>Close</button>
-        </form>
+        <p className="api-error">{error}</p>
       </Modal>
     </SubmitModalStyled>
   );

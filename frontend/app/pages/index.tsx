@@ -7,23 +7,31 @@ import constants from "appConstants";
 import { me } from "api/me";
 import { useChallenges } from "hooks/useChallenges";
 import { useEffect } from "react";
+import { FilterContextProvider } from "context/FilterContext";
+import { User } from "types/user";
+import { useUser } from "hooks/useUser";
 
 interface Props {
   challenges: Challenge[];
+  user: User;
 }
 
 const { AUTH_TOKEN_COOKIE_NAME } = constants;
 
-export default function Home({ challenges }: Props) {
+export default function Home({ challenges, user }: Props) {
   const { setChallenges } = useChallenges();
+  const { setCurrentUser, setIsAuthenticated } = useUser();
 
   useEffect(() => {
+    setCurrentUser(user);
     setChallenges(challenges);
   }, []);
 
   return (
     <PageSkeleton>
-      <Dashboard />
+      <FilterContextProvider>
+        <Dashboard />
+      </FilterContextProvider>
     </PageSkeleton>
   );
 }
@@ -51,14 +59,14 @@ export const getServerSideProps: GetServerSideProps = async (
     return registerRedirectObj;
   }
 
-  if (!meData?.data.success) return registerRedirectObj;
+  if (!meData?.data.success || !meData.data.user) return registerRedirectObj;
 
   const challenges = await getChallenges(authCookie);
-  console.log(challenges.data);
 
   return {
     props: {
       challenges: challenges.data,
+      user: meData.data.user,
     },
   };
 };

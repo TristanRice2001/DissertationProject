@@ -11,6 +11,7 @@ const variantColors = {
   stop: "#E52727",
   reset: "#FAFF00",
   hint: "#30D5EC",
+  submit: "#30D5EC",
 };
 
 const ActionButtonStyled = styled.button<Props>`

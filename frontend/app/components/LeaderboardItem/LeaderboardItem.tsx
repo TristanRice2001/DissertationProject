@@ -2,14 +2,20 @@ import { LeaderboardItemStyled } from "./LeaderboardItemStyled";
 
 interface Props {
   username: string;
+  leaderboardIndex: number;
   points: number;
 }
 
-const LeaderboardItem = ({ username, points }: Props) => {
+const LeaderboardItem = ({ username, leaderboardIndex, points }: Props) => {
   return (
     <LeaderboardItemStyled>
-      <div className="username">{username}</div>
-      <div className="points">{points}</div>
+      <div className="username">
+        <span className="index">{leaderboardIndex}.</span> {username}
+      </div>
+      <div className="points">
+        {points}
+        <span className="ptsLetters">pts</span>
+      </div>
     </LeaderboardItemStyled>
   );
 };

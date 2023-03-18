@@ -20,32 +20,41 @@ type SubmitProps =
 const { AUTH_TOKEN_COOKIE_NAME } = constants;
 
 export const useAuth = () => {
-  const genericApiError = "Ther was a problem registering your user";
+  const genericApiError = "There was a problem registering your user";
   const router = useRouter();
   const [apiError, setApiError] = useState<string>("");
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   const handleSubmit = async ({ valuesType, values }: SubmitProps) => {
     let response;
+    if (isLoading) {
+      return;
+    }
 
+    setIsLoading(true);
     try {
       if (valuesType === "login") response = await login(values);
       else response = await register(values);
     } catch {
       setApiError(genericApiError);
+      setIsLoading(false);
+      return;
     }
 
     if (!response?.data.success) {
+      setIsLoading(false);
       const errorMessage = response?.data.message || genericApiError;
       setApiError(errorMessage);
       return;
     }
-
+    console.log("here");
     setCookie(AUTH_TOKEN_COOKIE_NAME, response.data.token);
     router.push("/");
   };
 
   return {
     handleSubmit,
+    isLoading,
     apiError,
   };
 };

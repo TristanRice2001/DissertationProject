@@ -3,4 +3,10 @@ export type LeaderboardItem = {
   points: number;
 };
 
-export type Leaderboard = LeaderboardItem[];
+export type Leaderboard = {
+  currentUserPosition: {
+    context: LeaderboardItem[];
+    position: number;
+  };
+  leaderboardTop10: LeaderboardItem[];
+};

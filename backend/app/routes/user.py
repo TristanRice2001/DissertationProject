@@ -9,7 +9,15 @@ from app.validators.validate_user import validate_userid, validate_userid_exists
 @app.route("/me")
 @jwt_token_required
 def me(jwt_user):
-    return generic_response(message=auth_messages["jwt_valid"], is_successfull=True)
+    user_response = {
+        "username": jwt_user.username,
+        "points": jwt_user.points
+    }
+    return generic_response(
+        message=auth_messages["jwt_valid"],
+        is_successfull=True,
+        user=user_response
+    )
 
 @app.route("/user/<user_id>/points")
 @validator(

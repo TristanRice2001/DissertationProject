@@ -1,4 +1,7 @@
+import { CROSS_ICON } from "assets";
+import Image from "next/image";
 import { ReactNode, useEffect, useRef } from "react";
+import { ModalStyled } from "./ModalStyled";
 
 interface Props {
   isOpen?: boolean;
@@ -16,9 +19,14 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
   }, [isOpen]);
 
   return (
-    <dialog ref={ref} onClose={onClose}>
+    <ModalStyled ref={ref} onClose={onClose}>
+      <form method="dialog">
+        <button onClick={onClose} className="close-button">
+          <Image src={CROSS_ICON} width={20} height={20} alt="Cross icon" />
+        </button>
+      </form>
       {children}
-    </dialog>
+    </ModalStyled>
   );
 };
 

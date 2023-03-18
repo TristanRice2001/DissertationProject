@@ -53,9 +53,14 @@ export const useForm = <T extends Values>(
     validateValue(name, value, newValues);
   };
 
+  const areValuesMissing = Object.values(values).some((val) => !val);
+  const doErrorsExist = Object.values(errors).some((val) => val);
+
   return {
     values,
     errors,
+    areValuesMissing,
+    doErrorsExist,
     handleChange,
   };
 };

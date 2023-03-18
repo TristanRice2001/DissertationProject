@@ -7,9 +7,12 @@ const AuthScreenStyled = styled.div`
   display: grid;
   place-items: center;
 
-  form,
-  .auth-box {
+  form {
     width: min(90%, 350px);
+  }
+
+  .auth-box {
+    width: 100%;
   }
 
   .auth-box {
@@ -24,6 +27,9 @@ const AuthScreenStyled = styled.div`
   .title {
     font-family: ${(props) => props.theme.fonts.primary};
     color: ${(props) => props.theme.color.color5};
+    align-self: center;
+    font-weight: 400;
+    font-size: 27px;
   }
 `;
 

@@ -9,11 +9,18 @@ const ChallengePointsStyled = styled.div`
 
   p {
     font-weight: bold;
+    color: ${(props) => props.theme.color.color5};
     font-size: 20px;
   }
 
   p:last-child {
     line-height: 12px;
+  }
+
+  @media only screen and (max-width: 500px) {
+    flex-direction: row;
+    justify-content: flex-end;
+    gap: 5px;
   }
 `;
 

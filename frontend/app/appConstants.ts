@@ -1,4 +1,4 @@
-import globalDefaults from "../../globals.json";
+import globalDefaults from "./globals.json";
 
 export default {
   AUTH_TOKEN_COOKIE_NAME: "auth-token",

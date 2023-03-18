@@ -10,6 +10,7 @@ const ChallengeStatus = ({ status, ip, className }: Props) => {
   return (
     <ChallengeStatusStyled className={className}>
       <p>Status: {status}</p>
+      {ip && <p className="mobileDash">-</p>}
       <p>{ip}</p>
     </ChallengeStatusStyled>
   );
