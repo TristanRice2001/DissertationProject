@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+
+<html lang="en">
+	<head>
+		<title>Super SQL injection</title>
+	</head>
+
+	<body>
+		<h1>Employee search</h1>
+		<p>Use this form to search for an employee</p>
+		<form method="POST" action="">
+			<label for="employee-name">Employee name</label>
+			<input type="text" name="employee-name" id="employee-name" />
+			<input type="submit" />
+		</form>
+		{% if employees %}
+		<table>
+			<th>
+				<td>Id</td>
+				<td>Name</td>
+				<td>Salary</td>
+			</th>
+
+			{% for employee in employees %}
+				<tr>
+					<td>{{employee["id"]}}</td>
+					<td>{{employee["name"]}}</td>
+					<td>{{employee["salary"]}}</td>
+			{% endfor %}
+		</table>
+		{% endif %}
+	</body>
+</html>
