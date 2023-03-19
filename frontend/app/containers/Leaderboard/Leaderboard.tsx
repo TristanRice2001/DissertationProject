@@ -26,7 +26,7 @@ const Leaderboard = ({ leaderboard }: Props) => {
           points={leaderboardPosition.points}
         />
       ))}
-      <Title className="title">Your position</Title>
+      {userPositionContext && <Title className="title">Your position</Title>}
       {isAuthenticated &&
         userPositionContext &&
         userPositionContext.context.map((userContext, index) => (

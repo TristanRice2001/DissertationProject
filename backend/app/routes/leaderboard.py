@@ -35,13 +35,17 @@ def leaderboard(jwt_user):
         min(len(leaderboard_positions_sql_result), user_position+2)
     ]
     leaderboard_user_position_context = make_leaderboard_json(current_user_position_context) 
+    
+    current_user_position = {
+        "position": user_position,
+        "context": leaderboard_user_position_context
+    }
 
     response = {
         "leaderboardTop10": leaderboard,
-        "currentUserPosition": {
-            "position": user_position,
-            "context": leaderboard_user_position_context
-        }
     }
+
+    if jwt_user:
+        response["currentUserPosition"] = current_user_position
 
     return jsonify(response)

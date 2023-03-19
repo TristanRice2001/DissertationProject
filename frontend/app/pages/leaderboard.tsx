@@ -82,6 +82,15 @@ class AuthenticatedLeaderboardPropsFactory extends LeaderboardPropsFactory {
     this.user = null;
   }
 
+  protected async _getLeaderboard() {
+    try {
+      let response = await getLeaderboard(this.authToken);
+      this.leaderboard = response.data;
+    } catch (e) {
+      this.error = "Unable to load user";
+    }
+  }
+
   private async _getUser() {
     try {
       let response = await me(this.authToken);
