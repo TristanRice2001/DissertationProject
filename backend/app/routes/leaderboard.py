@@ -13,23 +13,21 @@ def leaderboard(jwt_user):
             .join(ChallengeCompletion, Challenge.id == ChallengeCompletion.challenge_id)
             .filter(ChallengeCompletion.user_id == User.id)
     ).scalar_subquery()
-    leaderboard_positions_sql = User.query.order_by(desc(chal_completions))
-    leaderboard_positions_sql_result = leaderboard_positions_sql.all()
+    
+    leaderboard_positions_sql_result = db.session.query(User, chal_completions).order_by(desc(chal_completions)).all()
     leaderboard_positions_top_10 = leaderboard_positions_sql_result[:10]
 
     make_leaderboard_json = lambda users: [
-        {"username": user.username, "points": user.points} for user in users
+            {"username": user.username, "points": points or 0} for user, points in users
     ]
 
     leaderboard = make_leaderboard_json(leaderboard_positions_top_10)
-    print(leaderboard_positions_sql_result)
-    print(jwt_user)
-    try:
-        user_position = leaderboard_positions_sql_result.index(jwt_user)
-        
-    except ValueError:
-        user_position = 0
-    print(user_position)
+    
+    if not jwt_user:
+        return jsonify({"leaderboardTop10": leaderboard})
+
+    user_position = [index for index, (user, points) in enumerate(leaderboard_positions_sql_result) if user == jwt_user][0]
+    
     current_user_position_context = leaderboard_positions_sql_result[
         max(0, user_position-1):
         min(len(leaderboard_positions_sql_result), user_position+2)
@@ -41,11 +39,7 @@ def leaderboard(jwt_user):
         "context": leaderboard_user_position_context
     }
 
-    response = {
+    return jsonify({
         "leaderboardTop10": leaderboard,
-    }
-
-    if jwt_user:
-        response["currentUserPosition"] = current_user_position
-
-    return jsonify(response)
+        "currentUserPosition": current_user_position
+    })
