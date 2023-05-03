@@ -1,0 +1,53 @@
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+html {
+	height: 100%;
+}
+
+body {
+	min-height: 100vh;
+}
+
+.container {
+	width: 100%;
+	height: 100%;
+	background: darkblue;
+	display: flex;
+	flex-direction: column;
+	padding-top: 80px;
+	align-items: center;
+}
+
+form {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	gap: 10px;
+	margin-bottom: 30px;
+}
+
+.recent-posts {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+
+.recent-posts h1 {
+	margin-bottom: 10px;
+}
+
+.error-msg {
+	color: red;
+}
+
+.success-msg {
+	color: green;
+}
+
+.recent-posts a {
+	color: white;
+}
