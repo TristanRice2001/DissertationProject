@@ -7,10 +7,12 @@ class ContainerDoesntExistError(Exception):
 class DockerService:
     def __init__(self):
         self.images = {
-            "1": "ubuntu",
-            "2": "ubuntu",
-            "3": "ubuntu",
-            "4": "ubuntu"
+            "1": "cooky-command-injection",
+            "4": "super-sql-injection",
+            "5": "lazy-local-file-inclusion",
+            "6": "xenial-xml-entities",
+            "7": "tactical-time-based-sql-injection",
+            "8": "sardonic-sql-injection"
         }
         self.network_name = "tun0"
         self.client = docker.DockerClient("unix:///var/run/docker.sock")
@@ -19,7 +21,7 @@ class DockerService:
         if image_id not in self.images.keys():
             raise ContainerDoesntExistError("Container doesn't exist")
     
-        container = self.client.containers.run(self.images[image_id], command="/bin/bash", tty=True, network="tun0", detach=True)
+        container = self.client.containers.run(self.images[image_id], network="tun0", detach=True)
         
         network = self.client.networks.get(self.network_name)
 
