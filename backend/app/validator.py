@@ -11,8 +11,6 @@ def validator(validators=[], raise_error_if_missing=True, expected_args=[]):
         @wraps(f)
         def decorator(*args, **kwargs):
             make_dict_items = lambda x: list(dict(x).items())
-            print("Kwargs: ", kwargs)
-            print("Args: ", args)
             m = MultiDict([                
                 *make_dict_items(request.form),
                 *make_dict_items(request.args),
@@ -26,7 +24,6 @@ def validator(validators=[], raise_error_if_missing=True, expected_args=[]):
                         return error_response(general_messages["argument_missing"](arg))
                     m[arg] = None
 
-            print("here")
             kwargs_to_pass = {}
             for arg_name in expected_args:
                 all_args = m.getall(arg_name)

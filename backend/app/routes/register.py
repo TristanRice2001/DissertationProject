@@ -16,8 +16,6 @@ from app.validator import validator
     expected_args=["username", "password"]
 )
 def register(username, password):
-    print(f"This is db: ")
-    print(db)
     user = User(username=username, password=password.encode())
     db.session.add(user)
     db.session.commit()    

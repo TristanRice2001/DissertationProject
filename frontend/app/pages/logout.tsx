@@ -18,7 +18,7 @@ export const getServerSideProps: GetServerSideProps = async (
   return {
     redirect: {
       permanent: false,
-      destination: "/register",
+      destination: "/login",
     },
     props: {},
   };

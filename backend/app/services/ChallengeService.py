@@ -11,7 +11,6 @@ class ChallengeService:
     
     def start_challenge(self, challenge_id):
         r = requests.get(f"http://{self.ip}:{self.port}/challenge/start/{challenge_id}")
-        print(r.text)
         response_json = json.loads(r.text)
 
         if r.status_code != 200:

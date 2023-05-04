@@ -44,7 +44,9 @@ const NavbarProfile = ({ username, profilePicture }: Props) => {
             points={user?.points || 0}
             className="challenge-points"
           />
-          <NavLink href="/profile">Profile</NavLink>
+          <NavLink download href="/profile.ovpn">
+            VPN Configuration
+          </NavLink>
           <NavLink href="/logout">Logout</NavLink>
         </div>
       )}

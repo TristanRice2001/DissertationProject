@@ -4,7 +4,8 @@ const DashboardStyled = styled.div`
   flex-grow: 1;
   padding-top: 50px;
   background: ${(props) => props.theme.color.color1};
-  height: 100%;
+  min-height: 100%;
+  padding-bottom: 50px;
 
   .challenge-container {
     margin: 0 auto;

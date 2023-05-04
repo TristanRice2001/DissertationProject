@@ -18,7 +18,6 @@ def index():
         conn = sqlite3.connect("database.db")
         cursor = conn.cursor()
         query = "INSERT INTO it_tickets (ticket_content) VALUES ('{}')".format(ticket_content)
-        print(query)
         cursor.execute(query)
     except:
         pass

@@ -57,11 +57,9 @@ class User(db.Model):
             challenge_index = all_challenges.index(user_chal.challenge)
             jsonify_chals[challenge_index] = user_chal.pretty()
 
-        # Redo this better later
         for i, chal in enumerate(jsonify_chals):
             is_completed = tuple([chal["id"]]) in all_completed_challenges
             new_chal = {**chal, "completed": is_completed}
             jsonify_chals[i] = new_chal
         
-        print(jsonify_chals)
         return jsonify_chals

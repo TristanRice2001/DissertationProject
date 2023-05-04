@@ -39,30 +39,24 @@ export default function Home({ challenges, user }: Props) {
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
-  const registerRedirectObj = {
+  const loginRedirectObj = {
     redirect: {
       permenant: false,
-      destination: "/register",
+      destination: "/login",
     },
     props: {},
   };
 
   const authCookie = context.req.cookies[AUTH_TOKEN_COOKIE_NAME];
-
-  if (!authCookie) return registerRedirectObj;
-
+  if (!authCookie) return loginRedirectObj;
   let meData;
-
   try {
     meData = await me(authCookie);
   } catch (e) {
-    return registerRedirectObj;
+    return loginRedirectObj;
   }
-
-  if (!meData?.data.success || !meData.data.user) return registerRedirectObj;
-
+  if (!meData?.data.success || !meData.data.user) return loginRedirectObj;
   const challenges = await getChallenges(authCookie);
-
   return {
     props: {
       challenges: challenges.data,
