@@ -61,6 +61,7 @@ class LeaderboardPropsFactory {
   }
 
   async getProps(): Promise<getPropsType> {
+    // Just get the leader board, without any user
     await this._getLeaderboard();
     return {
       props: {
@@ -84,6 +85,8 @@ class AuthenticatedLeaderboardPropsFactory extends LeaderboardPropsFactory {
 
   protected async _getLeaderboard() {
     try {
+      // send a request to the leaderboard with the authentication token
+      // otherwise, set the error for the class
       let response = await getLeaderboard(this.authToken);
       this.leaderboard = response.data;
     } catch (e) {
@@ -92,15 +95,19 @@ class AuthenticatedLeaderboardPropsFactory extends LeaderboardPropsFactory {
   }
 
   private async _getUser() {
+    // Make sure that the user is valid by sending a request to the /me api
     try {
       let response = await me(this.authToken);
       this.user = response.data.user;
     } catch (e) {
+      // If this request fails, then set the error of the class
       this.error = "Unable to load user";
     }
   }
 
   async getProps() {
+    // make sure to not only verify that the leaderboard is returned properly, but also that
+    // the user is loaded properly
     await this._getLeaderboard();
     await this._getUser();
     return {
@@ -117,6 +124,10 @@ export const getServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
   const authCookie = context.req.cookies[constants.AUTH_TOKEN_COOKIE_NAME];
+
+  // If the authentication token cookie is present in the user's request, then load
+  // the AuthenticatedLeaderboardPropsFactory class, otherwise, just load the
+  // LeaderboardPropsFactory class
 
   const propsFactory = authCookie
     ? new AuthenticatedLeaderboardPropsFactory(authCookie)
