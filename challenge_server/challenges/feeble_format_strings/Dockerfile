@@ -11,4 +11,7 @@ RUN gcc /home/john/formatstr.c -o /home/john/application -fno-stack-protector -m
 RUN echo 'john:mariam' | chpasswd
 RUN service ssh start
 EXPOSE 22
-RUN /usr/sbin/sshd
+EXPOSE 80
+ADD ./startup.sh /opt/startup.sh
+RUN chmod +x /opt/startup.sh
+ENTRYPOINT ["/opt/startup.sh"]
