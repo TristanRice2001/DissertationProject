@@ -14,4 +14,5 @@ RUN echo 'l4zy_l0c4al_file_1nclusi0n' > /home/john/flag
 RUN service ssh start
 EXPOSE 80
 EXPOSE 22
-RUN /usr/sbin/sshd
+ADD ./startup.sh /opt/startup.sh
+ENTRYPOINT ["/opt/startup.sh"]
