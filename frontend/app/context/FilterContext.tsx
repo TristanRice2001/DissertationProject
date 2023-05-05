@@ -20,7 +20,14 @@ interface Props {
 }
 
 export const FilterContextProvider = ({ children }: Props) => {
+  /*
+  This function makes a filter context, which allows global variables to be
+  used across the app, and changed at will
+  */
+
+  // Set the initial search query to be empty
   const [searchQuery, setSearchQuery] = useState("");
+  // Set the initial view type to list
   const [viewType, setViewType] = useState<View>("LIST");
 
   return (

@@ -17,16 +17,24 @@ import DashboardStlyed from "./DashboardStyled";
 import { useFilters } from "hooks/useFilters";
 
 const Dashboard = () => {
+  // Keeps track of which challenge start api requests are loading and which aren't
+  // This is better than having one state variable, because it allows multiple challenges
+  // to be loading at once
   const {
     isItemLoading: isChallengeStartLoading,
     setItemLoading: setIsChallengeStartLoading,
   } = useLoading();
+  // same thing as line 23, except it keeps track of which challenge stop API requests are
+  // loading
   const {
     isItemLoading: isChallengeStopLoading,
     setItemLoading: setIsChallengeStopLoading,
   } = useLoading();
+  // the two state variables below keep track of which modals are open or not.
   const [isHintsModalOpen, setIsHintsModalOpen] = useState(false);
   const [isSubmitModalOpen, setIsSubmitModalOpen] = useState(false);
+  // When the user clicks on the hints button for a challenge, the hints for that challenge
+  // will be saved in this variable
   const [selectedHints, setSelectedHints] = useState<string[]>([]);
   const [selectedChallengeSubmit, setSelectedChallengeSubmit] = useState<
     number | null

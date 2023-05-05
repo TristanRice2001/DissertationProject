@@ -29,8 +29,10 @@ const useLoading = () => {
   */
   const [loadingItems, dispatchLoadingItems] = useReducer(loadingQueries, []);
 
+  // To check if an item is loading, just check if its ID exists in the loadingItems array
   const isItemLoading = (id: number) => loadingItems.indexOf(id) > -1;
 
+  // in order to set an item as loading, just add it to the loadingItems array
   const setItemLoading = (id: number, isLoading: boolean) => {
     const type = isLoading ? "add_loading_item" : "remove_loading_item";
     dispatchLoadingItems({ type, id });

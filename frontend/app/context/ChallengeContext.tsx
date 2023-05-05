@@ -24,8 +24,13 @@ interface Props {
 }
 
 export const ChallengeContextProvider = ({ children }: Props) => {
+  // First, set the initial challenges to an empty array. This will eventually be
+  // set later in the application
   const [challenges, setChallenges] = useState<Challenge[]>([]);
 
+  // This will modify a challenge. It will take a full challenge object as an argument,
+  // and then find the matching challenge in the current challenges array. This will then
+  // set the challenge at that index to the challenge given in the argument
   const modifyChallengeStatus = (challenge: Challenge) => {
     const index = challenges.findIndex((val) => val.id === challenge.id);
     setChallenges((prev) => {
@@ -34,6 +39,8 @@ export const ChallengeContextProvider = ({ children }: Props) => {
     });
   };
 
+  // All that this does is the same as the function on line 34, but will set additional
+  // attributes, such as the IP address, secondsAvailable, and secondsLeft
   const setChallengeActive = (challenge: Challenge) => {
     const index = challenges.findIndex((val) => val.id === challenge.id);
     setChallenges((prev) => {
@@ -47,6 +54,8 @@ export const ChallengeContextProvider = ({ children }: Props) => {
     });
   };
 
+  // This is the opposite function as the one on line 44, it will remove those additional
+  // attributes that were added
   const setChallengeInactive = (challenge: Challenge) => {
     const index = challenges.findIndex((val) => val.id === challenge.id);
     setChallenges((prev) => {
@@ -60,6 +69,8 @@ export const ChallengeContextProvider = ({ children }: Props) => {
     });
   };
 
+  // Complete challenge will search for the challenge ID in the array, and if it exists,
+  // will set the 'completed' attribute for that challenge to true
   const completeChallenge = (chalId: number) => {
     const index = challenges.findIndex((val) => val.id === chalId);
 

@@ -13,8 +13,8 @@ class DockerService:
             "6": "xenial-xml-entities",
             "7": "tactical-time-based-sql-injection",
             "8": "sardonic-sql-injection",
-            "9": "ubuntu",
-            "10": "ubuntu"
+            "9": "barking-binary-exploitation",
+            "10": "feeble-format-strings"
         }
         self.network_name = "tun0"
         self.client = docker.DockerClient("unix:///var/run/docker.sock")
