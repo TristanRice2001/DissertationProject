@@ -7,6 +7,9 @@ COPY menu.html menu.html
 COPY home.html home.html
 COPY style.css style.css
 COPY admin admin/
+ENV APACHE_RUN_USER www-data
+ENV APACHE_RUN_GROUP www-data
+ENV APACHE_LOG_DIR /var/log/apache2
 RUN apt update && apt install openssh-server sudo -y
 RUN useradd -rm -d /home/john -s /bin/bash -u 1001 john
 RUN echo 'john:mariam' | chpasswd
