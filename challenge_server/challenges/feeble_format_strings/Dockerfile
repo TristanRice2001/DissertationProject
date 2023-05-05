@@ -1,6 +1,7 @@
 FROM php:8.0-apache
 
 COPY ./formatstr.c /home/john/formatstr.c
+COPY ./formatstr_redacted.c /home/john/formatstr_redacted.c
 COPY ./index.html /var/www/html/index.html
 RUN apt update
 RUN echo 'Y' | apt install build-essential
@@ -10,6 +11,7 @@ RUN useradd -rm -d /home/john -s /bin/bash -u 1001 john
 RUN gcc /home/john/formatstr.c -o /home/john/application -fno-stack-protector -m32
 RUN echo 'john:mariam' | chpasswd
 RUN service ssh start
+RUN rm /home/john/formatstr.c
 EXPOSE 22
 EXPOSE 80
 ADD ./startup.sh /opt/startup.sh
