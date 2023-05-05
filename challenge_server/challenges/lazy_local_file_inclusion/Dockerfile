@@ -15,7 +15,9 @@ RUN useradd -rm -d /home/john -s /bin/bash -u 1001 john
 RUN echo 'john:mariam' | chpasswd
 RUN echo 'l4zy_l0c4al_file_1nclusi0n' > /home/john/flag
 RUN service ssh start
+RUN chmod +x /opt/startup.sh
 EXPOSE 80
 EXPOSE 22
 ADD ./startup.sh /opt/startup.sh
+RUN chmod +x /opt/startup.sh
 ENTRYPOINT ["/opt/startup.sh"]
