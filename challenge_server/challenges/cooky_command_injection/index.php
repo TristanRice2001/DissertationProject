@@ -10,7 +10,7 @@ function handle_form() {
 
 	$backupname = $_POST["backupname"];
 	$backup_destination = "backups/{$backupname}.tar";
-	passthru("tar cf {$backup_destination} index.php; ls");
+	passthru("tar cf {$backup_destination} index.php;");
 	
 	echo "backup successful!";
 	echo "backup can be found at <a href=\"/{$backup_destination}\">{$backupname}.tar</a>";
