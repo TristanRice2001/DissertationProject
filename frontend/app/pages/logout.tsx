@@ -9,6 +9,8 @@ const Logout = () => {
 export const getServerSideProps: GetServerSideProps = async (
   context: GetServerSidePropsContext
 ) => {
+  // If the user visits the /logout URL, then deregister their
+  // Auth token cookie, and redirect them to the login page
   context.res.setHeader(
     "Set-Cookie",
     cookie.serialize(constants["AUTH_TOKEN_COOKIE_NAME"], "", {
