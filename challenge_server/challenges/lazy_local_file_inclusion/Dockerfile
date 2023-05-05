@@ -14,4 +14,4 @@ RUN echo 'l4zy_l0c4al_file_1nclusi0n' > /home/john/flag
 RUN service ssh start
 EXPOSE 80
 EXPOSE 22
-CMD ["/usr/sbin/sshd", "-D"]
+RUN /usr/sbin/sshd
