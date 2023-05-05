@@ -2,7 +2,7 @@
 
 int main(int argc, char **argv) {
 	char buffer[256];
-	char hidden_flag[] = "test";
+	char hidden_flag[] = "f33bl3_f0rm4t_str1ngs";
 	printf("Hidden flag is at %p\n", &hidden_flag);
 	gets(buffer);
 	printf(buffer);

@@ -10,7 +10,7 @@ COPY admin admin/
 RUN apt update && apt install openssh-server sudo -y
 RUN useradd -rm -d /home/john -s /bin/bash -u 1001 john
 RUN echo 'john:mariam' | chpasswd
-RUN echo 'test' > /home/john/flag
+RUN echo 'l4zy_l0c4al_file_1nclusi0n' > /home/john/flag
 RUN service ssh start
 EXPOSE 80
 EXPOSE 22
